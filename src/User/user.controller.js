@@ -1,14 +1,10 @@
 const userService = require("../User/user.services");
 
 exports.createUser = async (req, res) => {
-  const { name, birthdate, email, phoneNumber, location, aadharCard, aadharCardImageUrl, password, confirmPassword } = req.body;
+  const { name, birthdate, email, phoneNumber, location, aadharCard, aadharCardImageUrl, password} = req.body;
 
-  if (!name || !birthdate || !email || !phoneNumber || !location || !aadharCard || !aadharCardImageUrl || !password || !confirmPassword) {
+  if (!name || !birthdate || !email || !phoneNumber || !location || !aadharCard || !aadharCardImageUrl || !password ) {
     return res.status(400).json({ message: "Fields are empty" });
-  }
-
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: "Passwords do not match" });
   }
 
   try {
