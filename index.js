@@ -30,6 +30,8 @@ mongoose
     process.exit();
   });
 
+const UserRouter = require("./src/User/user.routes");
+app.use("/api/user", UserRouter);
 
 app.get('/', (req, res) => res.send('Hello World!'));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
