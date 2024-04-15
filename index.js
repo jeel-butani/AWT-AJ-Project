@@ -36,7 +36,8 @@ app.use("/api/user", UserRouter);
 const CompanyRouter = require("./src/Company/company.routes");
 app.use("/api/company",CompanyRouter);
 
-
+const DriverRouter = require("./src/Driver/driver.routes");
+app.use("/api/driver", DriverRouter);
 
 app.get('/', (req, res) => res.send('Hello World!'));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

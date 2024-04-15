@@ -13,10 +13,6 @@ exports.findDriverById = async (id) => {
   return await DriverModel.findById(id);
 };
 
-exports.findDriverByEmail = async (email) => {
-  return await DriverModel.findOne({ email });
-};
-
 exports.findDriverByName = async (name) => {
   const condition = name
     ? { name: { $regex: new RegExp(name), $options: "i" } }

@@ -83,16 +83,3 @@ exports.deleteDriver = async (req, res) => {
   }
 };
 
-exports.getDriverByEmail = async (req, res) => {
-  const email = req.query.email;
-  try {
-    const driver = await driverService.findDriverByEmail(email);
-    if (!driver) {
-      return res.status(404).json({ message: "Driver not found" });
-    }
-    res.json({ message: "Driver found", driver });
-  } catch (err) {
-    console.error("Error fetching driver by email:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
