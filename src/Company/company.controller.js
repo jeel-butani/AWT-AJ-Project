@@ -96,3 +96,35 @@ exports.getCompanyByEmail = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.addDriverToCompany = async (req, res) => {
+  const companyId = req.params.companyId; 
+  const { driverId } = req.body; 
+  try {
+    const updatedCompany = await companyService.addDriverToCompany(companyId, driverId);
+    res.status(200).json({ message: "Driver added to company", company: updatedCompany });
+  } catch (err) {
+    console.error("Error adding driver to company:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.createDriverAndAddToCompany = async (req, res) => {
+  const { name, birthdate, licenseNumber, licensePhotoUrl, aadharCardNumber, aadharCardPhotoUrl, price, location, phoneNumber, typeOfVehicle, password } = req.body;
+
+  if (!name || !birthdate || !licenseNumber || !licensePhotoUrl || !aadharCardNumber || !aadharCardPhotoUrl || !price || !location || !phoneNumber || !typeOfVehicle || !password) {
+    return res.status(400).json({ message: "Fields are empty" });
+  }
+
+  try {
+    const newDriver = await driverService.createDriver(req.body);
+
+    const companyId = req.params.companyId;
+    await companyService.addDriverToCompany(companyId, newDriver._id);
+
+    res.status(201).json({ message: "Driver created and added to company successfully", driver: newDriver });
+  } catch (err) {
+    console.error("Error creating driver and adding to company:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

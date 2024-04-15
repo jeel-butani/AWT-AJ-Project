@@ -26,7 +26,11 @@ const companySchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  drivers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Driver' 
+  }]
 }, {
   timestamps: true
 });

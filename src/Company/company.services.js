@@ -34,21 +34,23 @@ exports.deleteCompany = async (id) => {
   return await CompanyModel.findByIdAndDelete(id);
 };
 
+exports.addDriverToCompany = async (companyId, driverId) => {
+  return await CompanyModel.findByIdAndUpdate(companyId, { $push: { drivers: driverId } }, { new: true });
+};
 
+exports.addDriverToCompany = async (companyId, driverId) => {
+  try {
+    const company = await Company.findById(companyId);
+    if (!company) {
+      throw new Error("Company not found");
+    }
 
+    company.drivers.push(driverId);
 
+    const updatedCompany = await company.save();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return updatedCompany;
+  } catch (err) {
+    throw err; 
+  }
+};
