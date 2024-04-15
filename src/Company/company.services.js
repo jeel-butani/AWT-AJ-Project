@@ -31,7 +31,7 @@ exports.updateCompany = async (id, updateData) => {
 };
 
 exports.deleteCompany = async (id) => {
-  return await CompanyModel.findByIdAndRemove(id);
+  return await CompanyModel.findByIdAndDelete(id);
 };
 
 
