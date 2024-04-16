@@ -1,5 +1,5 @@
 const companyService = require("../Company/company.services");
-
+const driverService = require("../Driver/driver.services");
 exports.createCompany = async (req, res) => {
   const { name, gstNumber, email, ownerName, location, password } = req.body;
 
@@ -101,7 +101,7 @@ exports.addDriverToCompany = async (req, res) => {
   const companyId = req.params.companyId; 
   const { driverId } = req.body; 
   try {
-    const updatedCompany = await companyService.addDriverToCompany(companyId, driverId);
+    const updatedCompany = await companyService.upadteDriverToCompany(companyId, driverId);
     res.status(200).json({ message: "Driver added to company", company: updatedCompany });
   } catch (err) {
     console.error("Error adding driver to company:", err);
@@ -121,7 +121,7 @@ exports.createDriverAndAddToCompany = async (req, res) => {
 
     const companyId = req.params.companyId;
     await companyService.addDriverToCompany(companyId, newDriver._id);
-
+ 
     res.status(201).json({ message: "Driver created and added to company successfully", driver: newDriver });
   } catch (err) {
     console.error("Error creating driver and adding to company:", err);
