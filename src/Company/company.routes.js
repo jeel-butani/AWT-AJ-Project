@@ -11,5 +11,5 @@ router.put("/:id", companyController.updateCompany);
 router.delete("/:id", companyController.deleteCompany);
 router.put("/:companyId/drivers/add", companyController.addDriverToCompany);
 router.post("/:companyId/drivers", companyController.createDriverAndAddToCompany);
-
+router.get("/:companyId/drivers", companyController.getDriversByCompanyId);
 module.exports = router;

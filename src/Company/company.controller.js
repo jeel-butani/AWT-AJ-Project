@@ -128,3 +128,14 @@ exports.createDriverAndAddToCompany = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.getDriversByCompanyId = async (req, res) => {
+  const companyId = req.params.companyId;
+  try {
+    const drivers = await companyService.findDriversByCompanyId(companyId);
+    res.json({ message: "Drivers found", drivers });
+  } catch (err) {
+    console.error("Error fetching drivers for company:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

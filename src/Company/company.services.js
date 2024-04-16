@@ -54,3 +54,11 @@ exports.addDriverToCompany = async (companyId, driverId) => {
     throw err; 
   }
 };
+
+exports.findDriversByCompanyId = async (companyId) => {
+  const company = await CompanyModel.findById(companyId).populate('drivers');
+  if (!company) {
+    throw new Error("Company not found");
+  }
+  return company.drivers;
+};
