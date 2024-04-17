@@ -88,5 +88,28 @@ public class CarController {
         return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 
+    @GetMapping("/amount/less/{amount}")
+    public ResponseEntity<List<Car>> getCarsByAmountLessThan(@PathVariable double amount) {
+        List<Car> cars = carRepository.findByAmountLessThan(amount);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }
+
+    @GetMapping("/available/count/greater/{count}")
+    public ResponseEntity<List<Car>> getCarsByAvailableCountGreaterThan(@PathVariable int count) {
+        List<Car> cars = carRepository.findByAvailableCountGreaterThan(count);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }
+
+    @GetMapping("/available/count/{id}")
+    public ResponseEntity<Integer> getAvailableCountById(@PathVariable String id) {
+        ObjectId objectId;
+        try {
+            objectId = new ObjectId(id);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        int availableCount = carRepository.findByAvailableCount(objectId);
+        return new ResponseEntity<>(availableCount, HttpStatus.OK);
+    }
     
 }
