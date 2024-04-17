@@ -69,4 +69,24 @@ public class CarController {
             return new ResponseEntity<>(cars, HttpStatus.OK);
         }
     }
+
+    @GetMapping("/fuel/{fuelType}")
+    public ResponseEntity<List<Car>> getCarsByFuelType(@PathVariable String fuelType) {
+        List<Car> cars = carRepository.findByFuelType(fuelType);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }
+
+    @GetMapping("/transmission/{transmissionType}")
+    public ResponseEntity<List<Car>> getCarsByTransmissionType(@PathVariable String transmissionType) {
+        List<Car> cars = carRepository.findByTransmissionType(transmissionType);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }
+
+    @GetMapping("/company/{companyName}")
+    public ResponseEntity<List<Car>> getCarsByCompanyName(@PathVariable String companyName) {
+        List<Car> cars = carRepository.findByCompanyName(companyName);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }
+
+    
 }
