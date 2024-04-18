@@ -12,4 +12,7 @@ router.delete("/:id", companyController.deleteCompany);
 router.put("/:companyId/drivers/add", companyController.addDriverToCompany);
 router.post("/:companyId/drivers", companyController.createDriverAndAddToCompany);
 router.get("/:companyId/drivers", companyController.getDriversByCompanyId);
+router.put("/:companyId/cars/add", companyController.addCarToCompany);
+router.post("/:companyId/cars", companyController.createCarAndAddToCompany);
+router.get("/:companyId/cars", companyController.getCarsByCompanyId);
 module.exports = router;

@@ -1,5 +1,5 @@
 const CompanyModel = require("../Company/company.model");
-
+const mongoose = require('mongoose');
 exports.createCompany = async (companyData) => {
   const company = new CompanyModel(companyData);
   return await company.save();
@@ -61,4 +61,30 @@ exports.findDriversByCompanyId = async (companyId) => {
     throw new Error("Company not found");
   }
   return company.drivers;
+};
+
+exports.updateCarToCompany = async (companyId, carId) => {
+  return await CompanyModel.findByIdAndUpdate(companyId, { $push: { cars: carId } }, { new: true });
+};
+
+exports.addCarToCompany = async (companyId, carId) => {
+  try {
+
+    const timestamp = Math.floor(Date.parse(carId.date) / 1000);
+
+    const objectId = mongoose.Types.ObjectId.createFromTime(timestamp);
+
+    const company = await CompanyModel.findById(companyId);
+    if (!company) {
+      throw new Error("Company not found");
+    }
+
+    company.cars.push(objectId);
+
+    const updatedCompany = await company.save();
+
+    return updatedCompany;
+  } catch (err) {
+    throw err;
+  }
 };
