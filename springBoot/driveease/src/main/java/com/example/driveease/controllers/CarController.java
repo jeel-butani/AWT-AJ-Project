@@ -111,5 +111,5 @@ public class CarController {
         int availableCount = carRepository.findByAvailableCount(objectId);
         return new ResponseEntity<>(availableCount, HttpStatus.OK);
     }
-    
+
 }
