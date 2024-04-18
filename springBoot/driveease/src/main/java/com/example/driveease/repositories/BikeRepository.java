@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface BikeRepository extends MongoRepository<Bike, ObjectId> {
     List<Bike> findByBikeName(String bikeName);
     List<Bike> findByFuel(String fuel);
-    List<Bike> findByTransmissionType(String transmissionType);
     List<Bike> findByCompanyName(String companyName);
     List<Bike> findByAmountLessThan(double amount);
     List<Bike> findByAvailableCountGreaterThan(int count);
