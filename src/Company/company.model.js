@@ -30,7 +30,11 @@ const companySchema = new mongoose.Schema({
   drivers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Driver' 
-  }]
+  }],
+  cars: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'cars'
+  }],
 }, {
   timestamps: true
 });
