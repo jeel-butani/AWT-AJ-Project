@@ -19,11 +19,11 @@ public class CarController {
     @Autowired
     CarRepository carRepository;
 
-    @PostMapping("/")
-    public ResponseEntity<Car> createCar(@RequestBody Car car) {
-        Car savedCar = carRepository.save(car);
-        return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
-    }
+        @PostMapping("/")
+        public ResponseEntity<Car> createCar(@RequestBody Car car) {
+            Car savedCar = carRepository.save(car);
+            return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
+        }
 
     @GetMapping("/")
     public ResponseEntity<List<Car>> getAllCars() {
