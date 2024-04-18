@@ -1,5 +1,6 @@
 const companyService = require("../Company/company.services");
 const driverService = require("../Driver/driver.services");
+const axios = require('axios');
 exports.createCompany = async (req, res) => {
   const { name, gstNumber, email, ownerName, location, password } = req.body;
 
@@ -136,6 +137,54 @@ exports.getDriversByCompanyId = async (req, res) => {
     res.json({ message: "Drivers found", drivers });
   } catch (err) {
     console.error("Error fetching drivers for company:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.addCarToCompany = async (req, res) => {
+  const companyId = req.params.companyId; 
+  const { carId } = req.body; 
+  try {
+    const updatedCompany = await companyService.updateCarToCompany(companyId, carId);
+    res.status(200).json({ message: "Car added to company", company: updatedCompany });
+  } catch (err) {
+    console.error("Error adding car to company:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.createCarAndAddToCompany = async (req, res) => {
+  const { carName, fuelType, transmissionType, seats, registrationNumber, companyName, amount, imageUrl, totalCount, availableCount } = req.body;
+
+  if (!carName || !fuelType || !transmissionType || !seats || !registrationNumber || !companyName || !amount || !imageUrl || !totalCount || !availableCount) {
+    return res.status(400).json({ message: "Fields are empty" });
+  }
+
+  try {
+    const newCarResponse = await axios.post('http://localhost:8080/api/cars/', req.body);
+    const newCarId = newCarResponse.data.id;
+
+    const companyId = req.params.companyId;
+    await companyService.addCarToCompany(companyId, newCarId);
+
+    res.status(201).json({ message: "Car created and added to company successfully", car: newCarResponse.data });
+  } catch (err) {
+    console.error("Error creating car and adding to company:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getCarsByCompanyId = async (req, res) => {
+  const companyId = req.params.companyId;
+  try {
+    const carsResponse = await axios.get("http://localhost:8080/api/cars/");
+    const allCars = carsResponse.data;
+
+    const cars = allCars.filter(car => car.companyId === companyId);
+
+    res.json({ message: "Cars found", cars });
+  } catch (err) {
+    console.error("Error fetching cars for company:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 };
