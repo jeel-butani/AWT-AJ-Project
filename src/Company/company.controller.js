@@ -200,3 +200,60 @@ exports.getCarsByCompanyId = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.addbikeToCompany = async (req, res) => {
+  const companyId = req.params.companyId; 
+  const { bikeId } = req.body; 
+  try {
+    const updatedCompany = await companyService.updateBikeToCompany(companyId, bikeId);
+    res.status(200).json({ message: "Bike added to company", company: updatedCompany });
+  } catch (err) {
+    console.error("Error adding car to company:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.createBikeAndAddToCompany = async (req, res) => {
+  const { bikeName, fuel, seats, registrationNumber, companyName, amount, imageUrl, totalCount, availableCount, type } = req.body;
+
+  if (!bikeName || !fuel || !seats || !registrationNumber || !companyName || !amount || !imageUrl || !totalCount || !availableCount || !type) {
+    return res.status(400).json({ message: "Fields are empty" });
+  }
+
+  try {
+    const newBikeResponse = await axios.post('http://localhost:8080/api/bikes/', req.body);
+    const newBikeId = await axios.get('http://localhost:8080/api/bikes/lastInsertedId');
+    console.log("New bike response:", newBikeId.data);
+
+    const companyId = req.params.companyId;
+    await companyService.addBikeToCompany(companyId, newBikeId.data);
+
+    res.status(201).json({ message: "Bike created and added to company successfully", bike: newBikeResponse.data });
+  } catch (err) {
+    console.error("Error creating bike and adding to company:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getBikesByCompanyId = async (req, res) => {
+  const companyId = req.params.companyId;
+  try {
+    const company = await CompanyModel.findById(companyId);
+    if (!company) {
+      return res.status(404).json({ message: "Company not found" });
+    }
+
+    const bikeIds = company.bikes;
+    const bikesPromises = bikeIds.map(async (bikeId) => {
+      const bikeDetailsResponse = await axios.get(`http://localhost:8080/api/bikes/${bikeId}`);
+      return bikeDetailsResponse.data;
+    });
+
+    const bikes = await Promise.all(bikesPromises);
+
+    res.json({ message: "Bikes found", bikes });
+  } catch (err) {
+    console.error("Error fetching bikes for company:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
