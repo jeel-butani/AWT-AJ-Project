@@ -15,4 +15,8 @@ router.get("/:companyId/drivers", companyController.getDriversByCompanyId);
 router.put("/:companyId/cars/add", companyController.addCarToCompany);
 router.post("/:companyId/cars", companyController.createCarAndAddToCompany);
 router.get("/:companyId/cars", companyController.getCarsByCompanyId);
+router.put("/:companyId/bikes/add", companyController.addbikeToCompany);
+router.post("/:companyId/bikes", companyController.createBikeAndAddToCompany);
+router.get("/:companyId/bikes", companyController.getBikesByCompanyId);
+
 module.exports = router;
