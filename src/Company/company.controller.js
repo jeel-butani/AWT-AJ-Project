@@ -1,5 +1,7 @@
 const companyService = require("../Company/company.services");
 const driverService = require("../Driver/driver.services");
+const CompanyModel = require("../Company/company.model");
+const { ObjectId } = require('bson');
 const axios = require('axios');
 exports.createCompany = async (req, res) => {
   const { name, gstNumber, email, ownerName, location, password } = req.body;
@@ -162,10 +164,11 @@ exports.createCarAndAddToCompany = async (req, res) => {
 
   try {
     const newCarResponse = await axios.post('http://localhost:8080/api/cars/', req.body);
-    const newCarId = newCarResponse.data.id;
+    const newCarId = await axios.get('http://localhost:8080/api/cars/lastInsertedId');
+    console.log("New car response:", newCarId.data);
 
     const companyId = req.params.companyId;
-    await companyService.addCarToCompany(companyId, newCarId);
+    await companyService.addCarToCompany(companyId, newCarId.data);
 
     res.status(201).json({ message: "Car created and added to company successfully", car: newCarResponse.data });
   } catch (err) {
@@ -174,13 +177,22 @@ exports.createCarAndAddToCompany = async (req, res) => {
   }
 };
 
+
 exports.getCarsByCompanyId = async (req, res) => {
   const companyId = req.params.companyId;
   try {
-    const carsResponse = await axios.get("http://localhost:8080/api/cars/");
-    const allCars = carsResponse.data;
+    const company = await CompanyModel.findById(companyId);
+    if (!company) {
+      return res.status(404).json({ message: "Company not found" });
+    }
 
-    const cars = allCars.filter(car => car.companyId === companyId);
+    const carIds = company.cars;
+    const carsPromises = carIds.map(async (carId) => {
+      const carDetailsResponse = await axios.get(`http://localhost:8080/api/cars/${carId}`);
+      return carDetailsResponse.data;
+    });
+
+    const cars = await Promise.all(carsPromises);
 
     res.json({ message: "Cars found", cars });
   } catch (err) {
