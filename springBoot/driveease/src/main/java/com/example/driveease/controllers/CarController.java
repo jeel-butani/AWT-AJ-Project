@@ -1,3 +1,4 @@
+
 package com.example.driveease.controllers;
 
 import com.example.driveease.beans.Car;
@@ -112,4 +113,15 @@ public class CarController {
         return new ResponseEntity<>(availableCount, HttpStatus.OK);
     }
 
+    @GetMapping("/lastInsertedId")
+    public ResponseEntity<String> getLastInsertedId() {
+        List<Car> allCars = carRepository.findAll();
+        if (!allCars.isEmpty()) {
+            Car lastCar = allCars.get(allCars.size() - 1);
+            String lastInsertedId = lastCar.getId().toHexString();
+            return new ResponseEntity<>(lastInsertedId, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No cars found", HttpStatus.NOT_FOUND);
+        }
+    }
 }
