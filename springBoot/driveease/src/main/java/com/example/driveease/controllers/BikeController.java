@@ -112,4 +112,15 @@ public class BikeController {
         return new ResponseEntity<>(availableCount, HttpStatus.OK);
     }
 
+    @GetMapping("/lastInsertedId")
+    public ResponseEntity<String> getLastInsertedBikeId() {
+        List<Bike> allBikes = bikeRepository.findAll();
+        if (!allBikes.isEmpty()) {
+            Bike lastBike = allBikes.get(allBikes.size() - 1);
+            String lastInsertedId = lastBike.getId().toHexString();
+            return new ResponseEntity<>(lastInsertedId, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No bikes found", HttpStatus.NOT_FOUND);
+        }
+    }
 }
