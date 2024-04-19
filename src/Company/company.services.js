@@ -85,3 +85,38 @@ try {
   throw err;
 }
 };
+exports.addBikeToCompany = async (companyId, bikeId) => {
+  try {
+    const company = await CompanyModel.findById(companyId);
+    if (!company) {
+      throw new Error("Company not found");
+    }
+
+    company.bikes.push(bikeId);
+    const updatedCompany = await company.save();
+
+    return updatedCompany;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.updateBikeToCompany = async (companyId, bikeId) => {
+  return await CompanyModel.findByIdAndUpdate(companyId, { $push: { bikes: bikeId } }, { new: true });
+};
+
+exports.addBikeToCompany = async (companyId, bikeId) => {
+  try {
+    const company = await CompanyModel.findById(companyId);
+    if (!company) {
+      throw new Error("Company not found");
+    }
+
+    company.bikes.push(bikeId);
+    const updatedCompany = await company.save();
+
+    return updatedCompany;
+  } catch (err) {
+    throw err;
+  }
+};
