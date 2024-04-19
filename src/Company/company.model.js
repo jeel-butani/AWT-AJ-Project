@@ -35,6 +35,10 @@ const companySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'cars'
   }],
+  bikes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'bikes'
+  }]
 }, {
   timestamps: true
 });
