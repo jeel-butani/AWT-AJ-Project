@@ -33,3 +33,13 @@ exports.updateUser = async (id, updateData) => {
 exports.deleteUser = async (id) => {
   return await UserModel.findByIdAndRemove(id);
 };
+
+exports.getUserCount = async () => {
+  try {
+    const count = await UserModel.countDocuments();
+    return count;
+  } catch (err) {
+    console.error("Error getting user count:", err);
+    throw err;
+  }
+};

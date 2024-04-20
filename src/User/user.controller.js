@@ -96,3 +96,13 @@ exports.getUserByEmail = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.getUserCount = async (req, res) => {
+  try {
+    const count = await userService.getUserCount();
+    res.json({ count });
+  } catch (err) {
+    console.error("Error fetching user count:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
