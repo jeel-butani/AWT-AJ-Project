@@ -1,6 +1,4 @@
 const UserModel = require("../User/user.model");
-// require("dotenv").config();
-const jwt = require("jsonwebtoken");
 const crypto = require('crypto');
 exports.createUser = async (userData) => {
   const user = new UserModel(userData);
