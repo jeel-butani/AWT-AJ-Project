@@ -1,5 +1,7 @@
 const UserModel = require("../User/user.model");
-
+// require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const crypto = require('crypto');
 exports.createUser = async (userData) => {
   const user = new UserModel(userData);
   return await user.save();
@@ -42,4 +44,22 @@ exports.getUserCount = async () => {
     console.error("Error getting user count:", err);
     throw err;
   }
+};
+
+exports.checkUserExistsByEmailAndPassword = async (email, password) => {
+  const user = await UserModel.findOne({ email, password });
+  return user;
+};
+
+exports.createSecretToken = async (id) => {
+  return new Promise((resolve, reject) => {
+    crypto.randomBytes(32, (err, buffer) => {
+      if (err) {
+        reject(err);
+      } else {
+        const token = buffer.toString('hex');
+        resolve(token);
+      }
+    });
+  });
 };
