@@ -29,3 +29,13 @@ exports.updateDriver = async (id, updateData) => {
 exports.deleteDriver = async (id) => {
   return await DriverModel.findByIdAndDelete(id);
 };
+
+exports.getUserCount = async () => {
+  try {
+    const count = await DriverModel.countDocuments();
+    return count;
+  } catch (err) {
+    console.error("Error getting user count:", err);
+    throw err;
+  }
+};
