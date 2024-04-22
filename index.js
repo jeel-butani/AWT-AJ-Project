@@ -3,9 +3,12 @@ const cors = require("cors");
 const multer = require("multer");
 const Path = require("path");
 const { getUserCount } = require('./src/userAadharUpload/user.cout.fetch');
+const { getDriverCount } = require('./src/driverAadharUpload/driver.count.fetch');
 const { uploadStorage, fileFilter } = require("./src/userAadharUpload/user.adhar.upload");
+const { driverUploadStorage, driverFileFilter } = require("./src/driverAadharUpload/driver.adhar.upload");
 
-const upload = multer({ storage: uploadStorage, fileFilter: fileFilter, fileSize: 1048576 });
+const upload = multer({ storage: uploadStorage, fileFilter: fileFilter, fileSize: 2*1048576 });
+const uploadDriver = multer({ storage: driverUploadStorage, fileFilter: driverFileFilter, fileSize: 2*1048576 });
 const app = express();
 const port = 3000;
 app.use(
@@ -62,5 +65,15 @@ app.post("/user/profile", upload.single("userAadhar ele"), async function (req, 
   }
 });
 
+app.post("/driver/profile", uploadDriver.single("driverAadhar ele"), async function (req, res, next) {
+  try {
+      const count = await getDriverCount();
+      const filename = `driver${count + 1}${Path.extname(req.file.originalname)}`;
+      res.status(200).json({ message: "Success", filename: filename });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Failed to upload file" });
+  }
+});
 app.get('/', (req, res) => res.send('Hello World!'));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
