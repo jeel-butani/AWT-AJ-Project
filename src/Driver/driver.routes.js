@@ -9,5 +9,6 @@ router.get("/name", driverController.getDriverByName);
 router.get("/:id", driverController.getDriverById);
 router.put("/:id", driverController.updateDriver);
 router.delete("/:id", driverController.deleteDriver);
+router.post("/login", driverController.checkDriverExistsByEmailAndPassword);
 
 module.exports = router;
