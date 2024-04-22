@@ -82,3 +82,13 @@ exports.deleteDriver = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.getDriverCount = async (req, res) => {
+  try {
+    const count = await driverService.getUserCount();
+    res.json({ count });
+  } catch (err) {
+    console.error("Error fetching user count:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
