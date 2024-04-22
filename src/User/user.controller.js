@@ -106,3 +106,28 @@ exports.getUserCount = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.checkUserExistsByEmailAndPassword = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await userService.checkUserExistsByEmailAndPassword(email, password);
+    if(user){
+      const token = await userService.createSecretToken(user._id);
+      
+      res.cookie("token", token, {
+        withCredentials: true,
+        httpOnly: false,
+      });
+      res
+        .status(201)
+        .json({ message: "User signed in successfully", success: true, user, token: token });
+    }
+    else{
+      return res.json("user not exist")
+    }
+  } catch (err) {
+    console.error("Error checking user existence:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
