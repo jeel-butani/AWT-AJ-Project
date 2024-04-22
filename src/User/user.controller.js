@@ -9,7 +9,13 @@ exports.createUser = async (req, res) => {
 
   try {
     const newUser = await userService.createUser(req.body);
-    res.status(201).json({ message: "User created successfully", user: newUser });
+    const token = await userService.createSecretToken(newUser._id);
+      
+      res.cookie("token", token, {
+        withCredentials: true,
+        httpOnly: false,
+      });
+    res.status(201).json({ message: "User created successfully", user: newUser, token: token });
   } catch (err) {
     console.error("Error creating user:", err);
     res.status(500).json({ error: "Internal server error" });
