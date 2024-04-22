@@ -3,9 +3,9 @@ const cors = require("cors");
 const multer = require("multer");
 const Path = require("path");
 const { getUserCount } = require('./src/userAadharUpload/user.cout.fetch');
-const { getDriverCount } = require('./src/driverAadharUpload/driver.count.fetch');
+const { getDriverCount } = require('./src/driverFileUpload/driver.count.fetch');
 const { uploadStorage, fileFilter } = require("./src/userAadharUpload/user.adhar.upload");
-const { driverUploadStorage, driverFileFilter } = require("./src/driverAadharUpload/driver.adhar.upload");
+const { driverUploadStorage, driverFileFilter } = require("./src/driverFileUpload/driver.adhar.upload");
 
 const upload = multer({ storage: uploadStorage, fileFilter: fileFilter, fileSize: 2*1048576 });
 const uploadDriver = multer({ storage: driverUploadStorage, fileFilter: driverFileFilter, fileSize: 2*1048576 });
