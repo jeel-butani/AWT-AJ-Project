@@ -92,3 +92,27 @@ exports.getDriverCount = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.checkDriverExistsByEmailAndPassword = async (req, res) => {
+  const { aadharCardNumber, password } = req.body;
+  try {
+    const driver = await driverService.checkDriverExistsByEmailAndPassword(aadharCardNumber, password);
+    if(driver){
+      const token = await driverService.createSecretToken(driver._id);
+      
+      res.cookie("token", token, {
+        withCredentials: true,
+        httpOnly: false,
+      });
+      res
+        .status(201)
+        .json({ message: "Driver signed in successfully", success: true, driver, token: token });
+    }
+    else{
+      return res.json("driver not exist")
+    }
+  } catch (err) {
+    console.error("Error checking user existence:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
