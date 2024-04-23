@@ -1,5 +1,5 @@
 const CompanyModel = require("../Company/company.model");
-const mongoose = require('mongoose');
+const crypto = require('crypto');
 exports.createCompany = async (companyData) => {
   const company = new CompanyModel(companyData);
   return await company.save();
@@ -119,4 +119,23 @@ exports.addBikeToCompany = async (companyId, bikeId) => {
   } catch (err) {
     throw err;
   }
+};
+
+exports.checkCompanyExistsByEmailAndPassword = async (email, password) => {
+  const company = await CompanyModel.findOne({ email, password });
+  return company;
+};
+
+
+exports.createSecretToken = async (id) => {
+  return new Promise((resolve, reject) => {
+    crypto.randomBytes(32, (err, buffer) => {
+      if (err) {
+        reject(err);
+      } else {
+        const token = buffer.toString('hex');
+        resolve(token);
+      }
+    });
+  });
 };
