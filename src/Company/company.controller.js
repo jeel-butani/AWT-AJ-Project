@@ -12,7 +12,13 @@ exports.createCompany = async (req, res) => {
 
   try {
     const newCompany = await companyService.createCompany(req.body);
-    res.status(201).json({ message: "Company created successfully", company: newCompany });
+    const token = await userService.createSecretToken(newCompany._id);
+      
+      res.cookie("compnytoken", token, {
+        withCredentials: true,
+        httpOnly: false,
+      });
+    res.status(201).json({ message: "Company created successfully", company: newCompany, token: token });
   } catch (err) {
     console.error("Error creating company:", err);
     res.status(500).json({ error: "Internal server error" });
