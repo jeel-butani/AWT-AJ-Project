@@ -9,9 +9,15 @@ exports.createDriver = async (req, res) => {
 
   try {
     const newDriver = await driverService.createDriver(req.body);
-    res.status(201).json({ message: "Driver created successfully", driver: newDriver });
+    const token = await userService.createSecretToken(newDriver._id);
+      
+      res.cookie("drivertoken", token, {
+        withCredentials: true,
+        httpOnly: false,
+      });
+    res.status(201).json({ message: "Driver created successfully", driver: newDriver, token: token });
   } catch (err) {
-    console.error("Error creating driver:", err);
+    console.error("Error creating driver:", err); 
     res.status(500).json({ error: "Internal server error" });
   }
 };
