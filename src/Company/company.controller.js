@@ -257,3 +257,27 @@ exports.getBikesByCompanyId = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.checkCompanyExistsByEmailAndPassword = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const company = await companyService.checkCompanyExistsByEmailAndPassword( email, password);
+    if(company){
+      const token = await companyService.createSecretToken(company._id);
+      
+      res.cookie("token", token, {
+        withCredentials: true,
+        httpOnly: false,
+      });
+      res
+        .status(201)
+        .json({ message: "Company signed in successfully", success: true, company, token: token });
+    }
+    else{
+      return res.json("Company not exist")
+    }
+  } catch (err) {
+    console.error("Error checking user existence:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
