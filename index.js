@@ -80,8 +80,7 @@ app.post("/driver/profile", uploadDriver.single("driverAadhar ele"), async funct
 app.post("/driver/license", uploadLicense.single("driverLicense ele"), async function (req, res, next) {
   try {
       const count = await getDriverCount();
-      const filename = `driver${count + 1}${Path.extname(req.file.originalname)}`;
-      res.status(200).json({ message: "Success", filename: filename });
+      res.status(200).json({ message: "Success", count: count });
   } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Failed to upload file" });
