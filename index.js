@@ -59,8 +59,7 @@ app.use("/api/payment", PaymentRouter);
 app.post("/user/profile", upload.single("userAadhar ele"), async function (req, res, next) {
   try {
       const count = await getUserCount();
-      const filename = await `User_Aadhar_${count + 1}${Path.extname(req.file.originalname)}`;
-      res.status(200).json({ message: "Success", filename: filename });
+      res.status(200).json({ message: "Success", count: count});
   } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Failed to upload file" });
