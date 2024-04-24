@@ -27,6 +27,10 @@ const companySchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  ownerContact:{
+    type: String,
+    require: true
+  },
   drivers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Driver' 
