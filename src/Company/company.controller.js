@@ -287,13 +287,64 @@ exports.checkCompanyExistsByEmailAndPassword = async (req, res) => {
   }
 };
 
-exports.getCompaniesByLocation = async (req, res) => {
+exports.getBikesByLocation = async (req, res) => {
   const { location } = req.query;
+
   try {
     const companies = await companyService.getCompaniesByLocation(location);
-    res.json(companies);
+    const companyIds = companies.map(company => company._id);
+
+    const bikesPromises = companyIds.map(async companyId => {
+      const bikes = await companyService.getBikesByCompanyId(companyId);
+      const bikeIds = bikes.map(bike => bike._id);
+
+      const bikeDetailsPromises = bikeIds.map(async bikeId => {
+        const bikeDetailsResponse = await axios.get(`http://localhost:8080/api/bikes/${bikeId}`);
+        return bikeDetailsResponse.data;
+      });
+
+      return Promise.all(bikeDetailsPromises);
+    });
+
+    const bikesArrays = await Promise.all(bikesPromises);
+    const allBikes = bikesArrays.flat();
+    const flattenedBikes = allBikes.flat();
+    const uniqueBikes = [...new Set(flattenedBikes.map(JSON.stringify))].map(JSON.parse);
+
+    res.json({ bikes: uniqueBikes });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    console.error("Error fetching bikes by location:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getCarsByLocation = async (req, res) => {
+  const { location } = req.query;
+
+  try {
+    const companies = await companyService.getCompaniesByLocation(location);
+    const companyIds = companies.map(company => company._id);
+
+    const carsPromises = companyIds.map(async companyId => {
+      const cars = await companyService.getCarsByCompanyId(companyId);
+      const carIds = cars.map(car => car._id);
+
+      const carDetailsPromises = carIds.map(async carId => {
+        const carDetailsResponse = await axios.get(`http://localhost:8080/api/cars/${carId}`);
+        return carDetailsResponse.data;
+      });
+
+      return Promise.all(carDetailsPromises);
+    });
+
+    const carsArrays = await Promise.all(carsPromises);
+    const allCars = carsArrays.flat();
+    const flattenedCars = allCars.flat();
+    const uniqueCars = [...new Set(flattenedCars.map(JSON.stringify))].map(JSON.parse);
+
+    res.json({ cars: uniqueCars });
+  } catch (error) {
+    console.error("Error fetching cars by location:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

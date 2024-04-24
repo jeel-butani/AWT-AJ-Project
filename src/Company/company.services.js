@@ -148,3 +148,27 @@ exports.getCompaniesByLocation = async (location) => {
     throw error;
   }
 };
+
+exports.getBikesByCompanyId = async (companyId) => {
+  try {
+    const company = await CompanyModel.findById(companyId);
+    if (!company) {
+      throw new Error("Company not found");
+    }
+    return company.bikes;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getCarsByCompanyId = async (companyId) => {
+  try {
+    const company = await CompanyModel.findById(companyId);
+    if (!company) {
+      throw new Error("Company not found");
+    }
+    return company.cars;
+  } catch (err) {
+    throw err;
+  }
+};
