@@ -1,7 +1,6 @@
 const companyService = require("../Company/company.services");
 const driverService = require("../Driver/driver.services");
 const CompanyModel = require("../Company/company.model");
-const { ObjectId } = require('bson');
 const axios = require('axios');
 exports.createCompany = async (req, res) => {
   const { name, gstNumber, email, ownerName, location, password } = req.body;
@@ -12,7 +11,7 @@ exports.createCompany = async (req, res) => {
 
   try {
     const newCompany = await companyService.createCompany(req.body);
-    const token = await userService.createSecretToken(newCompany._id);
+    const token = await companyService.createSecretToken(newCompany._id);
       
       res.cookie("compnytoken", token, {
         withCredentials: true,
@@ -285,5 +284,16 @@ exports.checkCompanyExistsByEmailAndPassword = async (req, res) => {
   } catch (err) {
     console.error("Error checking user existence:", err);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getCompaniesByLocation = async (req, res) => {
+  const { location } = req.query;
+  try {
+    const companies = await companyService.getCompaniesByLocation(location);
+    res.json(companies);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
   }
 };
