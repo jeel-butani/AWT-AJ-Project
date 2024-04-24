@@ -139,3 +139,12 @@ exports.createSecretToken = async (id) => {
     });
   });
 };
+
+exports.getCompaniesByLocation = async (location) => {
+  try {
+    const companies = await CompanyModel.find({ location: { $regex: new RegExp(location, "i") } });
+    return companies;
+  } catch (error) {
+    throw error;
+  }
+};
