@@ -6,7 +6,7 @@ const driverSchema = new mongoose.Schema({
     required: true
   },
   birthdate: {
-    type: Date,
+    type: String,
     required: true
   },
   licenseNumber: {
@@ -28,7 +28,7 @@ const driverSchema = new mongoose.Schema({
     required: true
   },
   price: {
-    type: Number,
+    type: String,
     required: true
   },
   location: {
@@ -41,7 +41,7 @@ const driverSchema = new mongoose.Schema({
   },
   typeOfVehicle: {
     type: String,
-    enum: ["2 wheel", "4 wheel"],
+    enum: ["2-wheel", "4-wheel"],
     required: true
   },
   password: {
