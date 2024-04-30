@@ -20,11 +20,11 @@ public class CarController {
     @Autowired
     CarRepository carRepository;
 
-        @PostMapping("/")
-        public ResponseEntity<Car> createCar(@RequestBody Car car) {
-            Car savedCar = carRepository.save(car);
-            return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
-        }
+    @PostMapping("/")
+    public ResponseEntity<Car> createCar(@RequestBody Car car) {
+        Car savedCar = carRepository.save(car);
+        return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
+    }
 
     @GetMapping("/")
     public ResponseEntity<List<Car>> getAllCars() {
@@ -123,5 +123,11 @@ public class CarController {
         } else {
             return new ResponseEntity<>("No cars found", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCarCount() {
+        long count = carRepository.count();
+        return new ResponseEntity<>(count, HttpStatus.OK);
     }
 }
