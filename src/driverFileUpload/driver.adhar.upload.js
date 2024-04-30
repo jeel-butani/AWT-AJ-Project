@@ -9,7 +9,7 @@ const driverUploadStorage = multer.diskStorage({
   filename: async function (req, file, cb) {
     try {
       const count = await getDriverCount();
-      const filename = `driver${count + 1}${Path.extname(file.originalname)}`;
+      const filename = `Driver_Aadhar_${count + 1}${Path.extname(file.originalname)}`;
       cb(null, filename);
     } catch (error) {
       cb(error);
