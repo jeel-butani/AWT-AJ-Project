@@ -2,15 +2,20 @@ const express = require('express');
 const cors = require("cors");
 const multer = require("multer");
 const Path = require("path");
-const { getUserCount } = require('./src/userAadharUpload/user.cout.fetch');
-const { getDriverCount } = require('./src/driverFileUpload/driver.count.fetch');
 const { uploadStorage, fileFilter } = require("./src/userAadharUpload/user.adhar.upload");
 const { driverUploadStorage, driverFileFilter } = require("./src/driverFileUpload/driver.adhar.upload");
 const {driverLicenseStorage, driverLicenseFilter } = require("./src/driverFileUpload/driver.license.upload");
+const {uploadCarStorage, fileCarFilter } = require("./src/carImageUpload/car.image.upload");
+const {uploadBikeStorage, fileBikeFilter } = require("./src/bikeImageUpload/bike.image.upload");
 
 const upload = multer({ storage: uploadStorage, fileFilter: fileFilter, fileSize: 2*1048576 });
 const uploadDriver = multer({ storage: driverUploadStorage, fileFilter: driverFileFilter, fileSize: 2*1048576 });
 const uploadLicense = multer({ storage: driverLicenseStorage, fileFilter: driverLicenseFilter, fileSize: 2*1048576 });
+const uploadCar = multer({ storage: uploadCarStorage, fileFilter: fileCarFilter, fileSize: 1048576 });
+const uploadBike = multer({ storage: uploadBikeStorage, fileFilter: fileBikeFilter, fileSize: 1048576 });
+
+
+
 const app = express();
 const port = 3000;
 app.use(
@@ -58,8 +63,7 @@ app.use("/api/payment", PaymentRouter);
 
 app.post("/user/profile", upload.single("userAadhar ele"), async function (req, res, next) {
   try {
-      const count = await getUserCount();
-      res.status(200).json({ message: "Success", count: count});
+      res.status(200).json({ message: "Success", image: req.file.filename});
   } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Failed to upload file" });
@@ -68,9 +72,7 @@ app.post("/user/profile", upload.single("userAadhar ele"), async function (req, 
 
 app.post("/driver/profile", uploadDriver.single("driverAadhar ele"), async function (req, res, next) {
   try {
-      const count = await getDriverCount();
-  
-      res.status(200).json({ message: "Success", count: count });
+      res.status(200).json({ message: "Success", image: req.file.filename });
   } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Failed to upload file" });
@@ -79,8 +81,25 @@ app.post("/driver/profile", uploadDriver.single("driverAadhar ele"), async funct
 
 app.post("/driver/license", uploadLicense.single("driverLicense ele"), async function (req, res, next) {
   try {
-      const count = await getDriverCount();
-      res.status(200).json({ message: "Success", count: count });
+      res.status(200).json({ message: "Success", image: req.file.filename });
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Failed to upload file" });
+  }
+});
+
+app.post("/car/image", uploadCar.single("image"), async function (req, res, next) {
+  try {
+      res.status(200).json({ message: "Success" ,image: req.file.filename});
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Failed to upload file" });
+  }
+});
+
+app.post("/bike/image", uploadBike.single("image"), async function (req, res, next) {
+  try {
+      res.status(200).json({ message: "Success" ,image: req.file.filename});
   } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Failed to upload file" });
