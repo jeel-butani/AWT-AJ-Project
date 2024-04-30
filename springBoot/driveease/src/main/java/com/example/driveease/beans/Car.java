@@ -30,17 +30,13 @@ public class Car {
     @Field(name = "seats")
     private String seats;
 
-    @NotBlank(message = "Registration number is mandatory")
-    @Field(name = "registration_number")
-    private String registrationNumber;
-
     @NotBlank(message = "Company name is mandatory")
     @Field(name = "company_name")
     private String companyName;
 
     @NotNull(message = "Amount is mandatory")
     @Field(name = "amount")
-    private double amount;
+    private String amount;
 
     @NotBlank(message = "URL of car image is mandatory")
     @Field(name = "image_url")
@@ -48,20 +44,19 @@ public class Car {
 
     @NotNull(message = "Total car count is mandatory")
     @Field(name = "total_count")
-    private int totalCount;
+    private String totalCount;
 
     @NotNull(message = "Available car count is mandatory")
     @Field(name = "available_count")
-    private int availableCount;
+    private String availableCount;
 
     public Car() {}
 
-    public Car(String carName, String fuelType, String transmissionType, String seats, String registrationNumber, String companyName, double amount, String imageUrl, int totalCount, int availableCount) {
+    public Car(String carName, String fuelType, String transmissionType, String seats, String companyName, String amount, String imageUrl, String totalCount, String availableCount) {
         this.carName = carName;
         this.fuelType = fuelType;
         this.transmissionType = transmissionType;
         this.seats = seats;
-        this.registrationNumber = registrationNumber;
         this.companyName = companyName;
         this.amount = amount;
         this.imageUrl = imageUrl;
@@ -109,14 +104,6 @@ public class Car {
         return seats;
     }
 
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
-    }
-
-    public String getRegistrationNumber() {
-        return registrationNumber;
-    }
-
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
@@ -125,13 +112,7 @@ public class Car {
         return companyName;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
+    
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
@@ -141,19 +122,6 @@ public class Car {
         return imageUrl;
     }
 
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
-    }
-
-    public int getTotalCount() {
-        return totalCount;
-    }
-
-    public void setAvailableCount(int availableCount) {
-        this.availableCount = availableCount;
-    }
-
-    public int getAvailableCount() {
-        return availableCount;
-    }
+   
+    
 }
