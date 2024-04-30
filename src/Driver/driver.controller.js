@@ -1,15 +1,15 @@
 const driverService = require("../Driver/driver.services");
 
 exports.createDriver = async (req, res) => {
-  const { name, birthdate, licenseNumber, licensePhotoUrl, aadharCardNumber, aadharCardPhotoUrl, price, location, contactNumber, typeOfVehicle, password } = req.body;
+  const { name, birthdate, licenseNumber, licensePhotoUrl, aadharCardNumber, aadharCardPhotoUrl, price, location, phoneNumber, typeOfVehicle, password } = req.body;
 
-  if (!name || !birthdate || !licenseNumber || !licensePhotoUrl || !aadharCardNumber || !aadharCardPhotoUrl || !price || !location || !contactNumber || !typeOfVehicle || !password) {
+  if (!name || !birthdate || !licenseNumber || !licensePhotoUrl || !aadharCardNumber || !aadharCardPhotoUrl || !price || !location || !phoneNumber || !typeOfVehicle || !password) {
     return res.status(400).json({ message: "Fields are empty" });
   }
 
   try {
     const newDriver = await driverService.createDriver(req.body);
-    const token = await userService.createSecretToken(newDriver._id);
+    const token = await driverService.createSecretToken(newDriver._id);
       
       res.cookie("drivertoken", token, {
         withCredentials: true,
