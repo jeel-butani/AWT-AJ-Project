@@ -161,9 +161,9 @@ exports.addCarToCompany = async (req, res) => {
 };
 
 exports.createCarAndAddToCompany = async (req, res) => {
-  const { carName, fuelType, transmissionType, seats, registrationNumber, companyName, amount, imageUrl, totalCount, availableCount } = req.body;
+  const { carName, fuelType, transmissionType, seats, companyName, amount, imageUrl, totalCount, availableCount } = req.body;
 
-  if (!carName || !fuelType || !transmissionType || !seats || !registrationNumber || !companyName || !amount || !imageUrl || !totalCount || !availableCount) {
+  if (!carName || !fuelType || !transmissionType || !seats || !companyName || !amount || !imageUrl || !totalCount || !availableCount) {
     return res.status(400).json({ message: "Fields are empty" });
   }
 
@@ -219,9 +219,9 @@ exports.addbikeToCompany = async (req, res) => {
 };
 
 exports.createBikeAndAddToCompany = async (req, res) => {
-  const { bikeName, fuel, seats, registrationNumber, companyName, amount, imageUrl, totalCount, availableCount, type } = req.body;
+  const { bikeName, fuel, seats, companyName, amount, imageUrl, totalCount, availableCount, type } = req.body;
 
-  if (!bikeName || !fuel || !seats || !registrationNumber || !companyName || !amount || !imageUrl || !totalCount || !availableCount || !type) {
+  if (!bikeName || !fuel || !seats || !companyName || !amount || !imageUrl || !totalCount || !availableCount || !type) {
     return res.status(400).json({ message: "Fields are empty" });
   }
 
