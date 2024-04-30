@@ -123,5 +123,11 @@ public class BikeController {
             return new ResponseEntity<>("No bikes found", HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCarCount() {
+        long count = bikeRepository.count();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
 }
  
