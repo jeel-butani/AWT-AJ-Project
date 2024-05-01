@@ -199,7 +199,7 @@ exports.getCarsByCompanyId = async (req, res) => {
 
     const cars = await Promise.all(carsPromises);
 
-    res.json({ message: "Cars found", cars });
+    res.json({ allCars: cars });
   } catch (err) {
     console.error("Error fetching cars for company:", err);
     res.status(500).json({ error: "Internal server error" });
@@ -342,7 +342,7 @@ exports.getCarsByLocation = async (req, res) => {
     const flattenedCars = allCars.flat();
     const uniqueCars = [...new Set(flattenedCars.map(JSON.stringify))].map(JSON.parse);
 
-    res.json({ cars: uniqueCars });
+    res.json({ allCars: uniqueCars });
   } catch (error) {
     console.error("Error fetching cars by location:", error);
     res.status(500).json({ error: "Internal server error" });
