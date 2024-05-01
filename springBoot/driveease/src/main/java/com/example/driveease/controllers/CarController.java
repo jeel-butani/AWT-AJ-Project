@@ -10,7 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -21,23 +24,44 @@ public class CarController {
     CarRepository carRepository;
 
     @PostMapping("/")
-    public ResponseEntity<Car> createCar(@RequestBody Car car) {
+    public ResponseEntity<Map<String, Object>> createCar(@RequestBody Car car) {
         Car savedCar = carRepository.save(car);
-        return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
+        Map<String, Object> response = new HashMap<>();
+        response.put("car", savedCar);
+        response.put("hexId", savedCar.getId().toHexString());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Car>> getAllCars() {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getAllCars() {
         List<Car> cars = carRepository.findAll();
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        List<Map<String, Object>> responseList = new ArrayList<>();
+        for (Car car : cars) {
+            Map<String, Object> carMap = new HashMap<>();
+            carMap.put("car", car);
+            carMap.put("hexId", car.getId().toHexString());
+            responseList.add(carMap);
+        }
+        Map<String, List<Map<String, Object>>> responseBody = new HashMap<>();
+        responseBody.put("cars", responseList);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<Car> getCarById(@PathVariable("id") ObjectId id) {
+    public ResponseEntity<Map<String, Object>> getCarById(@PathVariable("id") ObjectId id) {
         Optional<Car> optionalCar = carRepository.findById(id);
-        return optionalCar.map(car -> new ResponseEntity<>(car, HttpStatus.OK))
-                          .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        if (optionalCar.isPresent()) {
+            Car car = optionalCar.get();
+            Map<String, Object> carResponse = new HashMap<>();
+            carResponse.put("car", car);
+            carResponse.put("hexId", car.getId().toHexString());
+            return new ResponseEntity<>(carResponse, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Car> updateCar(@PathVariable("id") ObjectId id, @RequestBody Car car) {
@@ -72,34 +96,81 @@ public class CarController {
     }
 
     @GetMapping("/fuel/{fuelType}")
-    public ResponseEntity<List<Car>> getCarsByFuelType(@PathVariable String fuelType) {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByFuelType(@PathVariable String fuelType) {
         List<Car> cars = carRepository.findByFuelType(fuelType);
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        List<Map<String, Object>> responseList = new ArrayList<>();
+        for (Car car : cars) {
+            Map<String, Object> carResponse = new HashMap<>();
+            carResponse.put("car", car);
+            carResponse.put("hexId", car.getId().toHexString());
+            responseList.add(carResponse);
+        }
+        Map<String, List<Map<String, Object>>> responseBody = new HashMap<>();
+        responseBody.put("cars", responseList);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @GetMapping("/transmission/{transmissionType}")
-    public ResponseEntity<List<Car>> getCarsByTransmissionType(@PathVariable String transmissionType) {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByTransmissionType(@PathVariable String transmissionType) {
         List<Car> cars = carRepository.findByTransmissionType(transmissionType);
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        List<Map<String, Object>> responseList = new ArrayList<>();
+        for (Car car : cars) {
+            Map<String, Object> carResponse = new HashMap<>();
+            carResponse.put("car", car);
+            carResponse.put("hexId", car.getId().toHexString());
+            responseList.add(carResponse);
+        }
+        Map<String, List<Map<String, Object>>> responseBody = new HashMap<>();
+        responseBody.put("cars", responseList);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @GetMapping("/company/{companyName}")
-    public ResponseEntity<List<Car>> getCarsByCompanyName(@PathVariable String companyName) {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByCompanyName(@PathVariable String companyName) {
         List<Car> cars = carRepository.findByCompanyName(companyName);
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        List<Map<String, Object>> responseList = new ArrayList<>();
+        for (Car car : cars) {
+            Map<String, Object> carResponse = new HashMap<>();
+            carResponse.put("car", car);
+            carResponse.put("hexId", car.getId().toHexString());
+            responseList.add(carResponse);
+        }
+        Map<String, List<Map<String, Object>>> responseBody = new HashMap<>();
+        responseBody.put("cars", responseList);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @GetMapping("/amount/less/{amount}")
-    public ResponseEntity<List<Car>> getCarsByAmountLessThan(@PathVariable double amount) {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByAmountLessThan(@PathVariable double amount) {
         List<Car> cars = carRepository.findByAmountLessThan(amount);
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        List<Map<String, Object>> responseList = new ArrayList<>();
+        for (Car car : cars) {
+            Map<String, Object> carResponse = new HashMap<>();
+            carResponse.put("car", car);
+            carResponse.put("hexId", car.getId().toHexString());
+            responseList.add(carResponse);
+        }
+        Map<String, List<Map<String, Object>>> responseBody = new HashMap<>();
+        responseBody.put("cars", responseList);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @GetMapping("/available/count/greater/{count}")
-    public ResponseEntity<List<Car>> getCarsByAvailableCountGreaterThan(@PathVariable int count) {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByAvailableCountGreaterThan(@PathVariable int count) {
         List<Car> cars = carRepository.findByAvailableCountGreaterThan(count);
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        List<Map<String, Object>> responseList = new ArrayList<>();
+        for (Car car : cars) {
+            Map<String, Object> carResponse = new HashMap<>();
+            carResponse.put("car", car);
+            carResponse.put("hexId", car.getId().toHexString());
+            responseList.add(carResponse);
+        }
+        Map<String, List<Map<String, Object>>> responseBody = new HashMap<>();
+        responseBody.put("cars", responseList);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
+
+
 
     @GetMapping("/available/count/{id}")
     public ResponseEntity<Integer> getAvailableCountById(@PathVariable String id) {
