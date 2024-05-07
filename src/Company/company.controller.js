@@ -348,3 +348,15 @@ exports.getCarsByLocation = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+exports.getDriversByLocation = async (req, res) => {
+  const { location } = req.query;
+
+  try {
+    const drivers = await companyService.getDriversByLocation(location);
+    res.json({ message: "Drivers found", drivers });
+  } catch (err) {
+    console.error("Error fetching drivers by location:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
