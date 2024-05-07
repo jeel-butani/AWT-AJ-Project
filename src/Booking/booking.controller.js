@@ -7,7 +7,7 @@ exports.createBooking = async (req, res) => {
     startDate,
     endDate,
     productId,
-    driverId,
+    type,
     paymentStatus,
   } = req.body;
 
@@ -17,7 +17,7 @@ exports.createBooking = async (req, res) => {
     !startDate ||
     !endDate ||
     !productId ||
-    !driverId ||
+    !type ||
     !paymentStatus
   ) {
     return res.status(400).json({ message: "Fields are empty" });
@@ -104,6 +104,21 @@ exports.getBookingByUserId = async (req, res) => {
     res.json({ message: "Bookings found", bookings });
   } catch (err) {
     console.error("Error fetching bookings by userId:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.getBookingsByUserId = async (req, res) => {
+  const userId = req.params.userId;
+  
+  try {
+    const bookings = await bookingService.findBookingsByUserId(userId);
+    if (!bookings || bookings.length === 0) {
+      return res.status(404).json({ message: "Bookings not found for user with ID: " + userId });
+    }
+    res.status(200).json({ message: "Bookings found", bookings });
+  } catch (error) {
+    console.error("Error fetching bookings by user ID:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
