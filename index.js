@@ -61,6 +61,9 @@ app.use("/api/booking", BookingRouter);
 const PaymentRouter = require("./src/Payment/payment.routes");
 app.use("/api/payment", PaymentRouter);
 
+const DriverRequestRouter = require("./src/DriverRequest/driver.request.route");
+app.use("/api/driverRequest", DriverRequestRouter);
+
 app.post("/user/profile", upload.single("userAadhar ele"), async function (req, res, next) {
   try {
       res.status(200).json({ message: "Success", image: req.file.filename});
