@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/cars") 
+@RequestMapping("/api/cars")
 @CrossOrigin(origins = "http://localhost:5173")
 public class CarController {
 
@@ -48,7 +48,6 @@ public class CarController {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getCarById(@PathVariable("id") ObjectId id) {
         Optional<Car> optionalCar = carRepository.findById(id);
@@ -62,7 +61,6 @@ public class CarController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<Car> updateCar(@PathVariable("id") ObjectId id, @RequestBody Car car) {
@@ -112,7 +110,8 @@ public class CarController {
     }
 
     @GetMapping("/transmission/{transmissionType}")
-    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByTransmissionType(@PathVariable String transmissionType) {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByTransmissionType(
+            @PathVariable String transmissionType) {
         List<Car> cars = carRepository.findByTransmissionType(transmissionType);
         List<Map<String, Object>> responseList = new ArrayList<>();
         for (Car car : cars) {
@@ -127,7 +126,8 @@ public class CarController {
     }
 
     @GetMapping("/company/{companyName}")
-    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByCompanyName(@PathVariable String companyName) {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByCompanyName(
+            @PathVariable String companyName) {
         List<Car> cars = carRepository.findByCompanyName(companyName);
         List<Map<String, Object>> responseList = new ArrayList<>();
         for (Car car : cars) {
@@ -157,7 +157,8 @@ public class CarController {
     }
 
     @GetMapping("/available/count/greater/{count}")
-    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByAvailableCountGreaterThan(@PathVariable int count) {
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getCarsByAvailableCountGreaterThan(
+            @PathVariable int count) {
         List<Car> cars = carRepository.findByAvailableCountGreaterThan(count);
         List<Map<String, Object>> responseList = new ArrayList<>();
         for (Car car : cars) {
@@ -170,8 +171,6 @@ public class CarController {
         responseBody.put("cars", responseList);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
-
-
 
     @GetMapping("/available/count/{id}")
     public ResponseEntity<Integer> getAvailableCountById(@PathVariable String id) {
@@ -201,5 +200,23 @@ public class CarController {
     public ResponseEntity<Long> getCarCount() {
         long count = carRepository.count();
         return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/reduceCount")
+    public ResponseEntity<?> reduceAvailableCountById(@PathVariable("id") ObjectId id) {
+        Optional<Car> optionalCar = carRepository.findById(id);
+        if (optionalCar.isPresent()) {  
+            Car car = optionalCar.get();
+            int currentAvailableCount = Integer.parseInt(car.getAvailableCount());
+            if (currentAvailableCount > 0) {
+                car.setAvailableCount(String.valueOf(currentAvailableCount - 1));
+                carRepository.save(car);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("No available cars left for this ID", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>("Car not found", HttpStatus.NOT_FOUND);
+        }
     }
 }
