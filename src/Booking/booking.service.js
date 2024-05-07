@@ -26,3 +26,12 @@ exports.deleteBooking = async (id) => {
 exports.findBookingsByUserId = async (userId) => {
   return await BookingModel.find({ userId });
 };
+
+exports.findBookingsByUserId = async (userId) => {
+  try {
+    const bookings = await BookingModel.find({ userId });
+    return bookings;
+  } catch (error) {
+    throw new Error("Error fetching bookings by user ID");
+  }
+};
