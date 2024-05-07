@@ -13,25 +13,33 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
     startDate: {
-      type: Date,
+      type: String,
       required: true,
     },
     endDate: {
-      type: Date,
+      type: String,
+      required: true,
+    },
+    startTime: {
+      type: String,
+      required: true,
+    },
+    endTime: {
+      type: String,
       required: true,
     },
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    driverId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-    },
     paymentStatus: {
-      type: Boolean,
+      type: String,
       default: false,
     },
+    type: {
+      type: String,
+      required: true,
+    }
   },
   {
     timestamps: true,
