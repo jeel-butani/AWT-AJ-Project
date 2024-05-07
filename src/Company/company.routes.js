@@ -4,6 +4,7 @@ const companyController = require("../Company/company.controller");
 
 router.get("/bikes/location", companyController.getBikesByLocation);
 router.get("/cars/location", companyController.getCarsByLocation);
+router.get("/drivers/location", companyController.getDriversByLocation);
 router.post("/", companyController.createCompany);
 router.get("/", companyController.getAllCompanies);
 router.get("/name", companyController.getCompanyByName);
