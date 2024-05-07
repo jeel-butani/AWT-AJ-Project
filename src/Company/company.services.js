@@ -1,4 +1,5 @@
 const CompanyModel = require("../Company/company.model");
+const DriverModel = require("../Driver/driver.model");
 const crypto = require('crypto');
 exports.createCompany = async (companyData) => {
   const company = new CompanyModel(companyData);
@@ -170,5 +171,14 @@ exports.getCarsByCompanyId = async (companyId) => {
     return company.cars;
   } catch (err) {
     throw err;
+  }
+};
+
+exports.getDriversByLocation = async (location) => {
+  try {
+    const drivers = await DriverModel.find({ location: { $regex: new RegExp(location, "i") } });
+    return drivers;
+  } catch (error) {
+    throw error;
   }
 };
