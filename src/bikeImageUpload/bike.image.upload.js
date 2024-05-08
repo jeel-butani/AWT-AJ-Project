@@ -26,7 +26,7 @@ const fileBikeFilter = (req, file, callback) => {
 
   const fileSize = parseInt(req.headers["content-length"]);
 
-  if (fileSize > 1048576) {
+  if (fileSize > 2*1048576) {
     return callback(new Error("File size is big"));
   }
 
